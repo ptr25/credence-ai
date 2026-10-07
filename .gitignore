@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+.pytest_cache/
+frontend/node_modules/
+frontend/.next/
+backend/app/storage/
+backend/app/results/mpl/
+
+frontend/.next-dev/
+
+.DS_Store
+.env
+.env.*
+*.log
+*.tsbuildinfo
+backend/app/models/torch/

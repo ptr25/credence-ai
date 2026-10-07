@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+python-multipart
+pymupdf
+pillow
+numpy
+torch
+torchvision
+scikit-learn
+scikit-image
+reportlab
+qrcode
+joblib
+matplotlib
+pytest
+httpx

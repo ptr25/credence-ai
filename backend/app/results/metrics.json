@@ -1,0 +1,41 @@
+{
+  "accuracy": 1.0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "rocAuc": 1.0,
+  "classifier": "RandomForest",
+  "datasetSize": 540,
+  "baseCertificates": 36,
+  "trainSize": 360,
+  "validationSize": 90,
+  "testSize": 90,
+  "validationF1": 1.0,
+  "split": "Grouped by base certificate; 24 train / 6 validation / 6 test",
+  "comparison": [
+    {
+      "method": "Global CNN only",
+      "accuracy": 0.8111111111111111,
+      "precision": 0.8205128205128205,
+      "recall": 0.7619047619047619,
+      "f1": 0.7901234567901234,
+      "rocAuc": 0.8648313492063492
+    },
+    {
+      "method": "Global + patch",
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "rocAuc": 1.0
+    },
+    {
+      "method": "Global + patch + SSIM",
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "rocAuc": 1.0
+    }
+  ]
+}
