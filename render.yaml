@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: credence-ai
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: INFERENCE_BATCH_SIZE
+        value: "1"

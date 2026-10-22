@@ -1,3 +1,4 @@
+import os
 import io, hashlib
 from PIL import Image
 import numpy as np
@@ -19,7 +20,7 @@ def make_pdf(fields,cid):
     text(450,252,fields['qualification'],16); text(450,208,'Grade: '+fields['grade'],25)
     text(450,168,fields['department']+'  |  Issued: '+fields['issueDate'],14)
     text(450,130,cid,14)
-    qr=qrcode.make('http://localhost:3000/verify?id='+cid)
+    qr=qrcode.make((os.environ.get('PUBLIC_BASE_URL') or os.environ.get('RENDER_EXTERNAL_URL','http://localhost:3000')).rstrip('/')+'/verify?id='+cid)
     c.drawImage(ImageReader(qr.get_image()),744,72,84,84)
     text(450,75,'SECURED BY CREDENCE AI',13)
     text(450,53,'AI Visual Fingerprint | SHA-256 | CredenceID Prototype',10)

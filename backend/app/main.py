@@ -11,10 +11,10 @@ from pydantic import BaseModel
 from app.services.vision_service import engine,render,embedding,compare
 from app.services.pdf_service import make_pdf,FIELDS,extract,image_pdf
 from app.ai.dataset import variant
-ROOT=Path(__file__).parent; STORAGE=ROOT/'storage'; STORAGE.mkdir(exist_ok=True)
+ROOT=Path(__file__).parent; STORAGE=Path(os.environ.get('STORAGE_DIR',str(ROOT/'storage'))); STORAGE.mkdir(parents=True,exist_ok=True)
 TOKENS={}; LAST=None
 SALT=b'credence-demo-user-v1'
-PASSWORD=hashlib.pbkdf2_hmac('sha256',b'credence123',SALT,200000).hex()
+PASSWORD=hashlib.pbkdf2_hmac('sha256',os.environ.get('ADMIN_PASSWORD','credence123').encode(),SALT,200000).hex()
 def now(): return datetime.datetime.now(datetime.timezone.utc).isoformat()
 def db():
     c=sqlite3.connect(STORAGE/'registry.db'); c.row_factory=sqlite3.Row; return c
@@ -112,3 +112,6 @@ def demo(cid:str,kind:str):
     if kind not in ['transform','tamper']: raise HTTPException(400,'Unknown demo')
     obj=get_cert(cid); im=Image.open(STORAGE/obj['referenceImagePath']).convert('RGB'); changed=variant(im,'jpeg' if kind=='transform' else 'grade',np.random.default_rng(42)); data=image_pdf(changed); name=cid+'-'+kind+'.pdf'; (STORAGE/name).write_bytes(data)
     return {'downloadUrl':'/storage/'+name,'verification':verify_bytes(data,cid)}
+
+@app.get('/api/health')
+def health(): return {'status':'ok'}

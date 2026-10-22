@@ -32,7 +32,9 @@ def patches(im):
 def embedding(im):
     model,pre=engine()
     with torch.inference_mode():
-        v=model(torch.stack([pre(x) for x in [im]+patches(im)])).numpy()
+        batch_size=max(1,int(os.environ.get('INFERENCE_BATCH_SIZE','10')))
+        images=[im]+patches(im)
+        v=torch.cat([model(torch.stack([pre(x) for x in images[i:i+batch_size]])) for i in range(0,len(images),batch_size)]).numpy()
     return v/np.maximum(np.linalg.norm(v,axis=1,keepdims=True),1e-12)
 def compare(ref,candidate,a=None):
     a=embedding(ref) if a is None else a

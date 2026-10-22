@@ -1,0 +1,10 @@
+.git
+.venv
+**/node_modules
+**/.next*
+**/__pycache__
+backend/app/storage
+backend/app/models/torch
+.env*
+docs
+output
