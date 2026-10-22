@@ -39,7 +39,7 @@ def embedding(im):
 def compare(ref,candidate,a=None):
     a=embedding(ref) if a is None else a
     b=embedding(candidate); cos=np.clip((a*b).sum(axis=1),0,1)
-    x=np.asarray(ref).astype(float)/255; y=np.asarray(candidate).astype(float)/255
+    x=np.asarray(ref).astype(np.float32)/255; y=np.asarray(candidate).astype(np.float32)/255
     diff=np.abs(x-y)
     s=float(structural_similarity(x,y,data_range=1,channel_axis=2))
     features=[float(cos[0]),float(cos[1:].mean()),float(cos[1:].min()),max(0,s),float(diff.mean())]

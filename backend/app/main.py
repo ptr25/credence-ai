@@ -87,7 +87,7 @@ def verify_bytes(data,cid):
     match=hashlib.sha256(data).hexdigest()==obj['documentHash']; result='TAMPERING_SUSPECTED' if pred else ('VERIFIED' if match else 'TRANSFORMED_COPY')
     if confidence<.65: result='REVIEW_RECOMMENDED'
     if obj['status']=='REVOKED': result='REVOKED'
-    uid=secrets.token_hex(8); strength=np.clip(diff.mean(axis=2)*6,0,1); overlay=np.array(im).astype(float); overlay[:,:,0]=overlay[:,:,0]*(1-strength)+255*strength; overlay[:,:,1:]*=(1-strength[:,:,None]); Image.fromarray(overlay.astype('uint8')).save(STORAGE/(uid+'.png'))
+    uid=secrets.token_hex(8); strength=np.clip(diff.mean(axis=2)*6,0,1); overlay=np.array(im).astype(np.float32); overlay[:,:,0]=overlay[:,:,0]*(1-strength)+255*strength; overlay[:,:,1:]*=(1-strength[:,:,None]); Image.fromarray(overlay.astype('uint8')).save(STORAGE/(uid+'.png'))
     LAST=now(); out={'certificateId':cid,'uploadedHash':hashlib.sha256(data).hexdigest(),'hashMatch':match,'globalSimilarity':f[0],'averagePatchSimilarity':f[1],'minimumPatchSimilarity':f[2],'structuralSimilarity':f[3],'pixelDifference':f[4],'patchSimilarities':ps,'mostAnomalousPatch':int(np.argmin(ps))+1,'modelPrediction':['AUTHENTIC_OR_TRANSFORMED','TAMPERED'][pred],'modelConfidence':confidence,'credenceIdStatus':'VALID' if hidden==cid else ('MISMATCH' if hidden else 'UNAVAILABLE'),'result':result,'heatmapPath':'/storage/'+uid+'.png','createdAt':LAST,'revocationReason':obj.get('revocationReason')}
     with db() as c: c.execute('INSERT INTO verifications(certificateId,data,createdAt) VALUES(?,?,?)',(cid,json.dumps(out),LAST))
     return out

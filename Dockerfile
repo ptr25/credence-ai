@@ -12,7 +12,7 @@ WORKDIR /app
 COPY requirements.lock.txt ./
 RUN pip install --no-cache-dir torch==2.8.0 torchvision==0.23.0 --index-url https://download.pytorch.org/whl/cpu && pip install --no-cache-dir -r requirements.lock.txt
 COPY backend/ backend/
-ENV PYTHONPATH=/app/backend TORCH_HOME=/app/weights
+ENV PYTHONPATH=/app/backend TORCH_HOME=/app/weights MALLOC_ARENA_MAX=2 MALLOC_TRIM_THRESHOLD_=131072
 RUN python -c "from app.services.vision_service import engine; engine()"
 COPY scripts/serve.py scripts/serve.py
 CMD ["python", "scripts/serve.py"]
